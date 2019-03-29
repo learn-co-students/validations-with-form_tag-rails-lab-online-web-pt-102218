@@ -9,17 +9,19 @@ class PostsController < ApplicationController
   end
 
   def update
-    @post = Post.assign_attributes(post_params)
+    @post = Post.find_by(params[:id])
+    @post = Post.assign_attributes(post_params(:title, :category, :content))
     if @post.valid?
-      @post.update(post_params)
+      @post.update(post_params(:title, :category, :content))
       redirect_to post_path(@post)
+    else
+      render :edit
     end
-    render :edit
   end
 
   private
 
-  def post_params
-    params.require(:post).permit(:title, :category, :content)
+  def post_params(*args)
+    params.require(:post).permit(*args)
   end
 end
