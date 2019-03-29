@@ -5,12 +5,12 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(post_params(:title, :category, :content))
+    @post = Post.new(post_params)
     if @post.valid?
       @post.save
       redirect_to post_path(@post)
     end
-    render :create
+    render :new
   end
 
   def show
@@ -22,10 +22,8 @@ class PostsController < ApplicationController
   end
 
   def update
-    @post = Post.find_by(params[:id])
-    @post = Post.assign_attributes(post_params(:title, :category, :content))
-    if @post.valid?
-      @post.update(post_params(:title, :category, :content))
+    @post = Post.find(params[:id])
+    if @post.update(post_params)
       redirect_to post_path(@post)
     else
       render :edit
@@ -34,7 +32,7 @@ class PostsController < ApplicationController
 
   private
 
-  def post_params(*args)
-    params.require(:post).permit(*args)
+  def post_params
+    params.permit(:title, :category, :content)
   end
 end
