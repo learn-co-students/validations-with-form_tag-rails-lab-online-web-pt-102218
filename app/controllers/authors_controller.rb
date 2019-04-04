@@ -8,12 +8,14 @@ class AuthorsController < ApplicationController
   end
 
   def create
-     binding.pry
-     if Author.create(author_params).valid?
+     
+     @author = Author.create(author_params)
+    
+     if @author.valid?
       
       redirect_to author_path(@author)
      else 
-       redirect_to new_author 
+       render :new  
      end 
   end
 
