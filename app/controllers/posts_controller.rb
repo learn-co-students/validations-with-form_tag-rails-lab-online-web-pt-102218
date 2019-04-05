@@ -3,8 +3,23 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
   end
 
+  def new 
+    @post = Post.new 
+  end
+
   def edit
     @post = Post.find(params[:id])
+  end
+
+  def create
+    @post = Post.new(post_params)
+
+    if @post.valid?
+      @post = Post.create(post_params)
+      redirect_to post_path(@post)
+    else 
+      render :new 
+    end
   end
 
   def update
@@ -12,9 +27,8 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     
     
-    if @post.valid? && post_params[:content] != "too short" 
+    if @post.update(post_params)
 
-      @post.update(post_params)
 
     redirect_to post_path(@post)
     else
